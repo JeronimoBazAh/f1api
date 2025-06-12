@@ -1,11 +1,14 @@
 package com.f1api.controller;
 
 import com.f1api.models.Piloto;
+import jakarta.validation.Valid;
+import org.hibernate.query.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import com.f1api.repository.PilotoRepository;
 
+import java.awt.print.Pageable;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,11 +23,11 @@ public class PilotoController {
     }
 
     @GetMapping
-    public List<Piloto> listar(){
-        return  repository.findAll();
+    public Page<Piloto> listar(Pageable pageable){
+        return  repository.findAll(pageable);
     }
     @PostMapping
-    public Piloto agregar(@RequestBody Piloto piloto) {
+    public Piloto agregar(@Valid @RequestBody Piloto piloto) {
         return repository.save(piloto);
     }
 

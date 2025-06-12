@@ -2,16 +2,24 @@ package com.f1api.models;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
+import jakarta.validation.constraints.NotBlank;
 
 @Entity
 public class Piloto {
 
     @Id
     private Long id;
+    @NotBlank(message = "Esta vacio culiau")
     private String nombre;
-    private String nacionalidad;
-    private String escuderia;
 
+    @NotBlank
+    private String nacionalidad;
+
+    @ManyToOne
+    private Escuderia escuderia;
+
+    
     public Piloto() {
     }
 
