@@ -1,14 +1,18 @@
 package com.f1api.controller;
 
+import com.f1api.Service.PilotoService;
+import com.f1api.dto.PilotoDTO;
+import com.f1api.dto.PilotoRequestDTO;
 import com.f1api.models.Piloto;
 import jakarta.validation.Valid;
-import org.hibernate.query.Page;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import com.f1api.repository.PilotoRepository;
 
-import java.awt.print.Pageable;
+import org.springframework.data.domain.Pageable; // ✅ ESTA SÍ VA
 import java.util.List;
 import java.util.Optional;
 
@@ -17,18 +21,20 @@ import java.util.Optional;
 public class PilotoController {
 
     private PilotoRepository repository;
+    private PilotoService pilotoService;
 
-    public PilotoController(PilotoRepository repository) {
+    public PilotoController(PilotoRepository repository,PilotoService pilotoService) {
         this.repository = repository;
+        this.pilotoService = pilotoService;
     }
 
     @GetMapping
-    public Page<Piloto> listar(Pageable pageable){
-        return  repository.findAll(pageable);
+    public Page<PilotoDTO> listarPilotos(Pageable pageable) {
+        return pilotoService.listarPilotos(pageable);
     }
     @PostMapping
-    public Piloto agregar(@Valid @RequestBody Piloto piloto) {
-        return repository.save(piloto);
+    public ResponseEntity<PilotoDTO> crearPiloto(@RequestBody @Valid PilotoRequestDTO dto){
+        return ResponseEntity.status(HttpStatus.CREATED).body(pilotoService.crearPiloto(dto));
     }
 
     @PutMapping("/{id}")
